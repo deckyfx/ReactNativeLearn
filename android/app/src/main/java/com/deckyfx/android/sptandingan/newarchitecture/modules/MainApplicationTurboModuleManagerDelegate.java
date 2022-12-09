@@ -1,4 +1,4 @@
-package com.reactnativelearn.newarchitecture.modules;
+package com.deckyfx.android.sptandingan.newarchitecture.modules;
 
 import com.facebook.jni.HybridData;
 import com.facebook.react.ReactPackage;

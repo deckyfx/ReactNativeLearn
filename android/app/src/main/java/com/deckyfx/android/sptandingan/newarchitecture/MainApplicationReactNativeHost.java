@@ -1,4 +1,4 @@
-package com.reactnativelearn.newarchitecture;
+package com.deckyfx.android.sptandingan.newarchitecture;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
@@ -19,9 +19,9 @@ import com.facebook.react.fabric.CoreComponentsRegistry;
 import com.facebook.react.fabric.FabricJSIModuleProvider;
 import com.facebook.react.fabric.ReactNativeConfig;
 import com.facebook.react.uimanager.ViewManagerRegistry;
-import com.reactnativelearn.BuildConfig;
-import com.reactnativelearn.newarchitecture.components.MainComponentsRegistry;
-import com.reactnativelearn.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
+import com.deckyfx.android.sptandingan.BuildConfig;
+import com.deckyfx.android.sptandingan.newarchitecture.components.MainComponentsRegistry;
+import com.deckyfx.android.sptandingan.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
 import java.util.ArrayList;
 import java.util.List;
 
