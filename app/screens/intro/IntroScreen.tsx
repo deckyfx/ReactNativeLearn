@@ -1,18 +1,18 @@
 import React from 'react';
 
-import {StackActions, useNavigation} from '@react-navigation/native';
+import { StackActions, useNavigation } from '@react-navigation/native';
 
-import {View, StyleSheet, ViewStyle, Text, Pressable} from 'react-native';
+import { View, StyleSheet, ViewStyle, Text, Pressable } from 'react-native';
 
-import RouteNames from '../../RouteNames';
+import AppRouteNames from '../AppRouteNames';
 import PreAuthStackRouteNames from '../preauth/PreAuthStackRouteNames';
 
-const IntroScreen = ({}) => {
+const IntroScreen = ({ }) => {
   const navigation = useNavigation();
 
   const toLogin = () => {
     navigation.dispatch(
-      StackActions.replace(RouteNames.PreAuthStack, {
+      StackActions.replace(AppRouteNames.PreAuthStack, {
         screen: PreAuthStackRouteNames.LoginScreen,
       }),
     );
@@ -20,7 +20,7 @@ const IntroScreen = ({}) => {
 
   const toRegister = () => {
     navigation.dispatch(
-      StackActions.replace(RouteNames.PreAuthStack, {
+      StackActions.replace(AppRouteNames.PreAuthStack, {
         screen: PreAuthStackRouteNames.RegisterStack,
       }),
     );

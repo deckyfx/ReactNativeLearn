@@ -1,3 +1,5 @@
+// this hook is used to manage debug panel state visibility
+
 import {useState} from 'react';
 
 import {GestureResponderEvent, ViewStyle} from 'react-native';

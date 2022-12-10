@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import POSStackRouteNames from './POSStackRouteNames';
 
@@ -8,7 +8,7 @@ import POSScreen from './pos/POSScreen';
 
 const Stack = createNativeStackNavigator();
 
-const PostAuthStack = () => {
+const POSStack = () => {
   return (
     <Stack.Navigator initialRouteName={POSStackRouteNames.POSScreen}>
       <Stack.Screen
@@ -22,4 +22,4 @@ const PostAuthStack = () => {
   );
 };
 
-export default PostAuthStack;
+export default POSStack;

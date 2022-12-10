@@ -1,16 +1,16 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {LanguageDetectorAsyncModule} from 'i18next';
+import { LanguageDetectorAsyncModule } from 'i18next';
+
 import * as RNLocalize from 'react-native-localize';
 
-import {loadFromAsyncStorage_UserPreferencesLanguage_Value} from '../stores/GlobalState';
+import { loadFromAsyncStorage_UserPreferencesLanguage_Value, writeToAsyncStorage_UserPreferencesLanguage } from '../stores/GlobalState';
 
 const LanguageDetector: LanguageDetectorAsyncModule = {
   type: 'languageDetector',
   async: true,
-  init: () => {},
+  init: () => { },
   detect: async (callback: (lang: string) => void) => {
     try {
-      //get stored language from Async storage
+      // Get stored language from Local Realm User Preference
       await loadFromAsyncStorage_UserPreferencesLanguage_Value().then(
         language => {
           if (language) {
@@ -28,17 +28,16 @@ const LanguageDetector: LanguageDetectorAsyncModule = {
         },
       );
     } catch (error) {
-      console.log('Error reading language', error);
+      console.warn('Error reading language', error);
     }
   },
   cacheUserLanguage: async (language: string) => {
     try {
       //save a user's language choice in Async storage
-      await AsyncStorage.setItem(
-        AStoreKeys.USER_PREFERENCES_LANGUAGE,
-        language,
-      );
-    } catch (error) {}
+      await writeToAsyncStorage_UserPreferencesLanguage(language)
+    } catch (error) {
+      console.warn('Error writing language', error);
+    }
   },
 };
 

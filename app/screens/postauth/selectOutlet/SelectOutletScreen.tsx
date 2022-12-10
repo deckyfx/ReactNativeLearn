@@ -1,14 +1,14 @@
 import React from 'react';
 
-import {StackActions, useNavigation} from '@react-navigation/native';
+import { StackActions, useNavigation } from '@react-navigation/native';
 
-import {View, StyleSheet, ViewStyle, Text, Pressable} from 'react-native';
+import { View, StyleSheet, ViewStyle, Text, Pressable } from 'react-native';
 
-import RouteNames from '../../../RouteNames';
+import AppRouteNames from '../../AppRouteNames';
 
 import PostAuthStackRouteNames from '../PostAuthStackRouteNames';
 
-const SelectOutletScreen = ({}) => {
+const SelectOutletScreen = ({ }) => {
   const navigation = useNavigation();
 
   const toPOS = () => {
@@ -18,7 +18,7 @@ const SelectOutletScreen = ({}) => {
   };
 
   const logout = () => {
-    navigation.dispatch(StackActions.replace(RouteNames.PreAuthStack, {}));
+    navigation.dispatch(StackActions.replace(AppRouteNames.PreAuthStack, {}));
   };
 
   return (

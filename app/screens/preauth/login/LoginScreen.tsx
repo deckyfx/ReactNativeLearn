@@ -1,15 +1,15 @@
 import React from 'react';
 
-import {View, StyleSheet, ViewStyle, Text, Pressable} from 'react-native';
+import { View, StyleSheet, ViewStyle, Text, Pressable } from 'react-native';
 
-import {StackActions, useNavigation} from '@react-navigation/native';
+import { StackActions, useNavigation } from '@react-navigation/native';
 
 import PreAuthStackRouteNames from '../PreAuthStackRouteNames';
 
 import PostAuthStackRouteNames from '../../postauth/PostAuthStackRouteNames';
-import RouteNames from '../../../RouteNames';
+import AppRouteNames from '../../AppRouteNames';
 
-const LoginScreen = ({}) => {
+const LoginScreen = ({ }) => {
   const navigation = useNavigation();
 
   const toRegister = () => {
@@ -19,19 +19,9 @@ const LoginScreen = ({}) => {
   };
 
   const toCreateBusiness = () => {
-    navigation.dispatch(
-      StackActions.replace(RouteNames.PostAuthStack, {
-        screen: PostAuthStackRouteNames.CreateBusiness,
-      }),
-    );
   };
 
   const toSelectOutlet = () => {
-    navigation.dispatch(
-      StackActions.replace(RouteNames.PostAuthStack, {
-        screen: PostAuthStackRouteNames.SelectOutlet,
-      }),
-    );
   };
 
   return (

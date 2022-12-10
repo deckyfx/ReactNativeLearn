@@ -1,13 +1,14 @@
 import React from 'react';
 
-import {StackActions, useNavigation} from '@react-navigation/native';
+import { StackActions, useNavigation } from '@react-navigation/native';
 
-import {View, StyleSheet, ViewStyle, Text, Pressable} from 'react-native';
+import { View, StyleSheet, ViewStyle, Text, Pressable } from 'react-native';
 
 import PostAuthStackRouteNames from '../../PostAuthStackRouteNames';
-import RouteNames from '../../../../RouteNames';
+import AppRouteNames from '../../../AppRouteNames';
 
-const POSScreen = ({}) => {
+const POSScreen = ({ }) => {
+  console.log("@##")
   const navigation = useNavigation();
 
   const selectOutlet = () => {
@@ -17,7 +18,7 @@ const POSScreen = ({}) => {
   };
 
   const logout = () => {
-    navigation.dispatch(StackActions.replace(RouteNames.PreAuthStack, {}));
+    navigation.dispatch(StackActions.replace(AppRouteNames.PreAuthStack, {}));
   };
 
   return (
@@ -42,6 +43,7 @@ const styles = StyleSheet.create<Style>({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: 'brown'
   },
 });
 

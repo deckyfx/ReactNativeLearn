@@ -1,8 +1,7 @@
-const RouteNames = Object.freeze({
+const AppRouteNames = Object.freeze({
   SplashScreen: 'SplashScreen',
   IntroStack: 'IntroStack',
   PreAuthStack: 'PreAuthStack',
-  PostAuthStack: 'PostAuthStack',
 });
 
-export default RouteNames;
+export default AppRouteNames;
