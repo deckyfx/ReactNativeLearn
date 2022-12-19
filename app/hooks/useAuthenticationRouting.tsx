@@ -1,10 +1,9 @@
-import { useCallback, useState } from 'react';
-
-import { useEffectOnce } from '@decky.fx/react-native-essentials';
+import { useEffect, useState } from 'react';
 
 import useUserPreference from './useUserPreference';
 
 import { UserPreferenceKeys } from '../realm/models/UserPreference';
+import useUserLogin from './useUserLogin';
 
 export enum AuthenticationRouteState {
     CHECKING,
@@ -17,27 +16,27 @@ export enum AuthenticationRouteState {
 const useAuthenticationRouting = () => {
     const [state, setState] = useState(AuthenticationRouteState.CHECKING);
 
-    const { value: signin } = useUserPreference(UserPreferenceKeys.LOGIN_AS);
     const { value: haveSeenIntro } = useUserPreference(UserPreferenceKeys.HAVE_SEE_INTRO);
-    const { value: haveBusiness } = useUserPreference(UserPreferenceKeys.HAVE_BUSINESS);
+
+    const { value: userLogin } = useUserLogin();
 
     const bootstrap = () => {
         if (!haveSeenIntro?.getValue()) {
             setState(AuthenticationRouteState.WATCH_INTRO);
             return;
         }
-        if (!signin?.getValue()) {
+        if (!userLogin) {
             setState(AuthenticationRouteState.LOGIN);
             return;
         }
-        if (!haveBusiness?.getValue()) {
+        if (!userLogin?.business) {
             setState(AuthenticationRouteState.DONT_HAVE_BUSINESS);
             return;
         }
         setState(AuthenticationRouteState.POS);
     }
 
-    useEffectOnce(bootstrap)
+    useEffect(bootstrap, [haveSeenIntro, userLogin])
 
     return state;
 };

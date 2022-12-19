@@ -6,7 +6,6 @@ import {S} from '../stores/Store';
 
 const ButtonA = ({}) => {
   const increaseValue = () => {
-    console.log(S);
     S.updateSampleValue();
   };
 

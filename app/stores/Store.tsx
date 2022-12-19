@@ -54,6 +54,4 @@ class GlobalStore extends MasterStore {
 export const StoreInstance = new GlobalStore();
 export const S = StoreInstance; // short hand
 
-console.log(StoreInstance.updateSampleValue);
-
 export const useStore = createUseStore(StoreInstance)!;

@@ -11,7 +11,6 @@ import IntroStack from './intro/IntroStack';
 import PreAuthStack from './preauth/PreAuthStack';
 import PostAuthStackRouteNames from './postauth/PostAuthStackRouteNames';
 import CreateBusinessScreen from './postauth/createBusiness/CreateBusinessScreen';
-import SelectOutletScreen from './postauth/selectOutlet/SelectOutletScreen';
 import POSStack from './postauth/pos/POSStack';
 
 const Stack = createNativeStackNavigator();

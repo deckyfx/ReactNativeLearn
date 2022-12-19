@@ -8,7 +8,6 @@ import PostAuthStackRouteNames from '../../PostAuthStackRouteNames';
 import AppRouteNames from '../../../AppRouteNames';
 
 const POSScreen = ({ }) => {
-  console.log("@##")
   const navigation = useNavigation();
 
   const selectOutlet = () => {

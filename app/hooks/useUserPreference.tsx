@@ -32,14 +32,14 @@ const useUserPreference = (key: string): { value: UserPreference | null, update:
             });
             write(newpreference);
         }
-    }, [])
+    }, [preference])
 
     const remove = useCallback(() => {
         if (preference[0]) {
             return
         }
         callremove(preference[0]);
-    }, [])
+    }, [preference])
 
     return { value: preference[0] || null, update, remove }
 };

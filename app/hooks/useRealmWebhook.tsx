@@ -1,6 +1,5 @@
 // Must be used in component inside AppProvider, LocalRealmProvider, and LanguageProvider
-
-import Realm from 'realm';
+import { useCallback, useEffect, useState } from 'react';
 
 import { EJSON } from 'bson';
 
@@ -8,7 +7,9 @@ import Config from 'react-native-config';
 
 import { useFetch } from '@decky.fx/react-native-essentials';
 
-import { useCallback, useMemo, useState } from 'react';
+import useUserPreference from './useUserPreference';
+
+import { UserPreferenceKeys } from '../realm/models/UserPreference';
 
 export enum RealmWebhookMethod {
     GET = "GET",
@@ -17,67 +18,97 @@ export enum RealmWebhookMethod {
     DELETE = "DELETE",
 }
 
-const useRealmWebhook = (endpoint: string, method: RealmWebhookMethod, payload: any) => {
-    useFetch(Config.REALM_WEBHOOK_URL + endpoint, )
+export type WebhookOptions = {
+    method?: RealmWebhookMethod,
+    body?: any
+    headers?: any,
+}
 
-    const login = useCallback(async () => {
-        setAuthState(RealmAuthState.Loading);
-        const credentials = Realm.Credentials.emailPassword(email, password);
-        try {
-            await app.logIn(credentials);
-            setAuthState(AuthState.None);
-        } catch (e) {
-            console.log('Error logging in', e);
-            setAuthState(AuthState.LoginError);
+export interface ResultSchema {
+    data?: EJSON.SerializableTypes | null,
+    error?: Error | null,
+}
+
+export interface ResponseSchema {
+    data?: EJSON.SerializableTypes | null,
+    error?: string | null,
+    errorCode?: string | null,
+    message?: string | null,
+    status?: boolean
+}
+
+const useRealmWebhook = (endpoint: string, options: WebhookOptions) => {
+    const { value: lang } = useUserPreference(UserPreferenceKeys.LANGUAGE);
+
+    const { value: token } = useUserPreference(UserPreferenceKeys.ACCESS_TOKEN);
+
+    const [result, setResult] = useState<ResultSchema>({
+        data: null,
+        error: null
+    });
+
+    options.method = options.method ? options.method : RealmWebhookMethod.POST;
+    options.headers = options.headers ? options.headers : {
+        'Content-Type': 'application/json',
+        lang: lang?.getValue() || "id",
+        Authorization: token?.getValue() ? 'Bearer ' + token?.getValue() : undefined,
+    };
+    if (!options.headers.Authorization) {
+        delete options.headers.Authorization;
+    }
+    options.body = (options.body == RealmWebhookMethod.POST ||
+        options.method == RealmWebhookMethod.PUT ||
+        options.method == RealmWebhookMethod.DELETE) ? JSON.stringify(options.body) : undefined;
+
+    const { data: fetchData, error: fetchError, loading, fetch } = useFetch(Config.REALM_WEBHOOK_URL + endpoint, options);
+
+    const retry = useCallback(async (newoptions: WebhookOptions | undefined | null) => {
+        if (!newoptions) {
+            newoptions = {}
         }
-    }, [email, password, setAuthState, app]);
+        Object.keys(options).forEach((key) => {
+            if ((newoptions as any)[key] === undefined) {
+                (newoptions as any)[key] = (options as any)[key];
+            }
+        })
+        await fetch(Config.REALM_WEBHOOK_URL + endpoint, newoptions);
+    }, []);
 
-    return [result, login]
+    const setData = async () => {
+        if (fetchData) {
+            const response = EJSON.deserialize(fetchData) as ResponseSchema;
+            if (!response.status || response.errorCode || !response.data) {
+                return setResult({
+                    data: null,
+                    error: new Error(response.message ? response.message : response.errorCode || '')
+                })
+            }
+            setResult({
+                data: response.data,
+                error: null
+            })
+        }
+    }
+
+    const setInError = async () => {
+        if (fetchError) {
+            setResult({
+                data: null,
+                error: fetchError
+            })
+        }
+    }
+
+    useEffect(() => {
+        setData()
+    }, [fetchData]);
+
+    useEffect(() => {
+        setInError()
+    }, [fetchError]);
+
+
+    return { loading, result: result.data, error: result.error, retry };
 };
 
 export default useRealmWebhook;
-
-/*
- * endpoint : "your_webhook_endpoint".
- * body : js object.
- * callback : your function to handle received data
- */
-
-const callWebhook = async (
-    endpoint = '',
-    body = {},
-    callback = null,
-    accessToken = '',
-    method = 'POST',
-    headers = null,
-) => {
-    try {
-        const getResponse = await fetch(Config.REALM_WEBHOOK_URL + endpoint, {
-            method: method,
-            headers: headers
-                ? headers
-                : {
-                    'Content-Type': 'application/json',
-                    lang: Strings.getCode(),
-                    Authorization: 'Bearer ' + accessToken,
-                },
-            body:
-                method == 'POST' || method == 'PUT' || method == 'DELETE'
-                    ? JSON.stringify(body)
-                    : null,
-        });
-        const getJson = await getResponse.json();
-        const response = await EJSON.deserialize(getJson);
-        if (callback) {
-            callback(response);
-        }
-        return response;
-    } catch (e) {
-        //handle network error
-        console.warn('[CALL WEBHOOK] Error', e);
-        const response = { status: false, message: e.toString() };
-        callback(response);
-    }
-};
-
-export default callWebhook;

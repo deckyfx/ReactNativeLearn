@@ -4,11 +4,17 @@ import { useMemo } from 'react';
 
 import Realm from 'realm';
 
-const useRealmQuery = <T extends Realm.Object<any, never>>(useQuery: <T>(type: string | ((new (...args: any) => T) & Realm.ObjectClass<any>)) => Realm.Results<T & Realm.Object<unknown, never>>, model: string | ((new (...args: any) => T) & Realm.ObjectClass<any>), queryFunction: (_each: T) => boolean) => {
+type UseQueryFirstArg<T> = <T>(type: string | ((new (...args: any) => T) & Realm.ObjectClass<any>)) => Realm.Results<T & Realm.Object<unknown, never>>;
+
+type UseQuerySecondArg<T> = string | ((new (...args: any) => T) & Realm.ObjectClass<any>);
+
+type UseQueryThirdArg<T> = ((_each: T) => boolean) | undefined;
+
+const useRealmQuery = <T extends Realm.Object<any, never>>(useQuery: UseQueryFirstArg<T>, model: UseQuerySecondArg<T>, queryFunction: UseQueryThirdArg<T> = undefined) => {
     const data = useQuery(model);
 
     const result = useMemo(() => {
-        return data.filter(queryFunction)
+        return queryFunction ? data.filter(queryFunction) : data
     }, [data]);
 
     return result

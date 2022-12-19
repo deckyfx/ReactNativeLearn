@@ -1,5 +1,5 @@
 {
-  "name": "ReactNativeLearn",
+  "name": "SharkPOSTandingan",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -11,7 +11,7 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
-    "@decky.fx/react-native-essentials": "^1.0.10",
+    "@decky.fx/react-native-essentials": "^1.0.13-c",
     "@react-native-async-storage/async-storage": "^1.17.10",
     "@react-native-community/netinfo": "^9.3.1",
     "@react-navigation/native": "^6.0.16",
@@ -26,6 +26,7 @@
     "react-i18next": "^11.18.6",
     "react-native": "0.70.6",
     "react-native-config": "^1.4.6",
+    "react-native-device-info": "^10.3.0",
     "react-native-get-random-values": "^1.8.0",
     "react-native-gradients": "^2.0.1",
     "react-native-localize": "^2.2.3",

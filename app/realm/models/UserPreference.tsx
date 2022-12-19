@@ -2,6 +2,7 @@ import Realm from "realm";
 
 export const UserPreferenceKeys = Object.freeze({
   LOGIN_AS: "LOGIN_AS",
+  ACCESS_TOKEN: "ACCESS_TOKEN",
   LOGIN_TIME: "LOGIN_TIME",
   HAVE_SEE_INTRO: "HAVE_SEE_INTRO",
   HAVE_BUSINESS: "HAVE_BUSINESS",
@@ -37,7 +38,7 @@ class UserPreference extends Realm.Object {
   value!: string;
   type!: PreferenceType;
   // the Task.generate() method creates Task objects with fields with default values
-  static generate({ key, value, type }: UserPreferenceConstructor) {
+  static generate({ key, value, type }: UserPreferenceConstructor | UserPreference) {
     return {
       _id: new Realm.BSON.ObjectId(),
       createdAt: new Date(),
