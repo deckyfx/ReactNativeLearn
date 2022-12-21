@@ -18,19 +18,20 @@ const useUserPreference = (key: string): { value: UserPreference | null, update:
 
     const realm = useRealm();
 
-    const [write, callremove] = useRealmUpsert(realm, UserPreference.schema.name);
+    const {write, upsert, remove: callRemove} = useRealmUpsert(realm, UserPreference.schema.name);
 
     const update = useCallback((value: number | string | boolean | Date | Object) => {
         if (preference[0]) {
-            preference[0].setValue(value, true);
-            write(preference[0]);
+            write(() => {
+                preference[0].setValue(value, true);
+            })
         } else {
             let newpreference = UserPreference.generate({
                 key,
                 value: UserPreference.parseValue(value),
                 type: UserPreference.inferTypeFromValue(value)
             });
-            write(newpreference);
+            upsert(newpreference);
         }
     }, [preference])
 
@@ -38,7 +39,7 @@ const useUserPreference = (key: string): { value: UserPreference | null, update:
         if (preference[0]) {
             return
         }
-        callremove(preference[0]);
+        callRemove(preference[0]);
     }, [preference])
 
     return { value: preference[0] || null, update, remove }

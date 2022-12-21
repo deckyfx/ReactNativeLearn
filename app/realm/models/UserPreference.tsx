@@ -1,16 +1,9 @@
 import Realm from "realm";
 
 export const UserPreferenceKeys = Object.freeze({
-  LOGIN_AS: "LOGIN_AS",
-  ACCESS_TOKEN: "ACCESS_TOKEN",
-  LOGIN_TIME: "LOGIN_TIME",
   HAVE_SEE_INTRO: "HAVE_SEE_INTRO",
-  HAVE_BUSINESS: "HAVE_BUSINESS",
-  CURRENT_OUTLET: "CURRENT_OUTLET",
-  CURRENT_POS_ID: "CURRENT_POS_ID",
-  SIGNIN_AS: "SIGNIN_AS",
-  SIGNIN_TIME: "SIGNIN_TIME",
   LANGUAGE: "LANGUAGE",
+  INTRO_TO_REGISTER: "INTRO_TO_REGISTER",
 })
 
 export enum PreferenceType {

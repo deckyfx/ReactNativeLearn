@@ -5,10 +5,16 @@ import DeviceInfo from 'react-native-device-info';
 
 import useRealmWebhook from './useRealmWebhook';
 
+import useUserLogin from './useUserLogin';
+
 import WEBHOOK_END_POINTS from '../constants/WEBHOOK_END_POINTS';
+
+import { UserLoginConstructor } from '../realm/models/UserLogin';
 
 const useRealmLogin = () => {
     const { loading, result, error, retry } = useRealmWebhook(WEBHOOK_END_POINTS.LOGIN, {});
+
+    const { value, update, remove } = useUserLogin();  
 
     const login = useCallback(async (username = '', password = '') => {
         await retry({
@@ -28,13 +34,15 @@ const useRealmLogin = () => {
 
     const parseResult = () => {
         if (!result) return;
+        remove();
+        update(result as UserLoginConstructor)
     }
 
     useEffect(() => {
         parseResult();
     }, [result])
 
-    return { loading, result, error, login, logout }
+    return { loading, value, error, login, logout }
 };
 
 export default useRealmLogin;

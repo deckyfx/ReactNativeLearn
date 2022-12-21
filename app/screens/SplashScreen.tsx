@@ -4,15 +4,11 @@ import { View, StyleSheet, ViewStyle } from 'react-native';
 
 import { RadialGradient } from 'react-native-gradients';
 
-import { useNavigation } from '@react-navigation/native';
-
 import { useTimeout } from '@decky.fx/react-native-essentials';
 
 import SharkLogo from '../assets/svg/shark-logo.svg';
 
 import useSharkLogoDimension from '../hooks/useSharkLogoDimension';
-
-import useUserPreference from '../hooks/useUserPreference';
 
 const colorList = [
   { offset: '0%', color: '#FFFFFF', opacity: '1' },
@@ -22,10 +18,6 @@ const colorList = [
 const SplashScreen = ({ }) => {
   const { logoHeight, logoWidth, getBackdropDimensions } =
     useSharkLogoDimension();
-
-  const { value: signin, update: setSignin, remove } = useUserPreference("signin");
-
-  const navigation = useNavigation();
 
   const splashScreenEnd = () => {
   };

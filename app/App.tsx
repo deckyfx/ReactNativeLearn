@@ -5,9 +5,10 @@ import 'react-native-get-random-values';
 import './i18n/i18n.config';
 
 import { LocalRealmProvider } from './realm/local/LocalRealmContext';
-import NavigationProvider from './providers/NavigationProvider';
 import PaperProvider from './providers/PaperProvider';
+import UIKittenProvider from './providers/UIKittenProvider';
 import QueryClientProvider from './providers/QueryClientProvider';
+import NavigationProvider from './providers/NavigationProvider';
 
 import AppBootstrap from './components/AppBootstrap';
 import AppRoute from './screens/AppRoute';
@@ -17,13 +18,15 @@ const App = () => {
   return (
     <LocalRealmProvider>
       <PaperProvider>
-        <QueryClientProvider>
-          <NavigationProvider>
-            <AppBootstrap />
-            <AppRoute />
-            <DebugPanel />
-          </NavigationProvider>
-        </QueryClientProvider>
+        <UIKittenProvider>
+          <QueryClientProvider>
+            <NavigationProvider>
+              <AppBootstrap />
+              <AppRoute />
+              <DebugPanel />
+            </NavigationProvider>
+          </QueryClientProvider>
+        </UIKittenProvider>
       </PaperProvider>
     </LocalRealmProvider >
   );

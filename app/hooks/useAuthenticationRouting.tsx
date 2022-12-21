@@ -4,6 +4,7 @@ import useUserPreference from './useUserPreference';
 
 import { UserPreferenceKeys } from '../realm/models/UserPreference';
 import useUserLogin from './useUserLogin';
+import useTimeout from '@decky.fx/react-native-essentials/lib/hooks/useTimeout';
 
 export enum AuthenticationRouteState {
     CHECKING,
@@ -36,7 +37,10 @@ const useAuthenticationRouting = () => {
         setState(AuthenticationRouteState.POS);
     }
 
-    useEffect(bootstrap, [haveSeenIntro, userLogin])
+    // Give delay to show splashscreen
+    const [execute] = useTimeout(bootstrap, 3000, false)
+
+    useEffect(execute, [haveSeenIntro, userLogin])
 
     return state;
 };

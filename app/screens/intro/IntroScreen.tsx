@@ -1,29 +1,23 @@
 import React from 'react';
 
-import { StackActions, useNavigation } from '@react-navigation/native';
-
 import { View, StyleSheet, ViewStyle, Text, Pressable } from 'react-native';
 
-import AppRouteNames from '../AppRouteNames';
-import PreAuthStackRouteNames from '../preauth/PreAuthStackRouteNames';
+import useUserPreference from '../../hooks/useUserPreference';
+
+import { UserPreferenceKeys } from '../../realm/models/UserPreference';
 
 const IntroScreen = ({ }) => {
-  const navigation = useNavigation();
+  const { update: haveSeeIntro } = useUserPreference(UserPreferenceKeys.HAVE_SEE_INTRO);
+
+  const { update: gotoRegister } = useUserPreference(UserPreferenceKeys.INTRO_TO_REGISTER);
 
   const toLogin = () => {
-    navigation.dispatch(
-      StackActions.replace(AppRouteNames.PreAuthStack, {
-        screen: PreAuthStackRouteNames.LoginScreen,
-      }),
-    );
+    haveSeeIntro(true);
   };
 
   const toRegister = () => {
-    navigation.dispatch(
-      StackActions.replace(AppRouteNames.PreAuthStack, {
-        screen: PreAuthStackRouteNames.RegisterStack,
-      }),
-    );
+    gotoRegister(true);
+    haveSeeIntro(true);
   };
 
   return (

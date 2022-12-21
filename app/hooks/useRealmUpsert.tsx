@@ -5,7 +5,13 @@ import { useCallback, useMemo } from 'react';
 import Realm from 'realm';
 
 const useRealmUpsert = (realm: Realm, schema: string, mode: Realm.UpdateMode.All | Realm.UpdateMode.Modified = Realm.UpdateMode.Modified) => {
-    const write = useCallback(async (data: Unmanaged<unknown, never>) => {
+    const write = useCallback(async (writer: () => void) => {
+        realm.write(() => {
+            writer()
+        });
+    }, []);
+
+    const upsert = useCallback(async (data: Unmanaged<unknown, never>) => {
         realm.write(() => {
             realm.create(schema, data, mode);
         });
@@ -17,7 +23,7 @@ const useRealmUpsert = (realm: Realm, schema: string, mode: Realm.UpdateMode.All
         });
     }, []);
 
-    return [write, remove]
+    return { write, upsert, remove }
 };
 
 export default useRealmUpsert;

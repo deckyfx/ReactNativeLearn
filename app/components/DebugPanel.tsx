@@ -14,7 +14,7 @@ const DebugPanel = () => {
 
   const { value: signin, update: setSignin, remove } = useUserPreference("signin");
 
-  const { loading, result, error, login } = useRealmLogin()
+  const { loading, value, error, login } = useRealmLogin()
 
   const addUserPreference = () => {
     login("decky.fiyemonda@shark.tech", "1234567");
@@ -29,10 +29,10 @@ const DebugPanel = () => {
   }
 
   useEffect(() => {
-    if (result) {
-      console.log("!!!!!!!!!!!!", (result as any).outlets[0].posIds);
+    if (value) {
+      console.log("!!!!!!!!!!!!", value);
     }
-  }, [loading, result, error])
+  }, [loading, value, error])
 
   return (
     <View style={generateStyle()}>

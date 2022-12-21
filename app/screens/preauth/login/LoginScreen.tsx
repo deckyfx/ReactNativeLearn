@@ -6,8 +6,7 @@ import { StackActions, useNavigation } from '@react-navigation/native';
 
 import PreAuthStackRouteNames from '../PreAuthStackRouteNames';
 
-import PostAuthStackRouteNames from '../../postauth/PostAuthStackRouteNames';
-import AppRouteNames from '../../AppRouteNames';
+import LoginForm from './LoginForm';
 
 const LoginScreen = ({ }) => {
   const navigation = useNavigation();
@@ -27,6 +26,7 @@ const LoginScreen = ({ }) => {
   return (
     <View style={styles.container}>
       <Text>Login Screen</Text>
+      <LoginForm />
       <Pressable onPress={toRegister}>
         <Text>To Register</Text>
       </Pressable>

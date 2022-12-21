@@ -7,9 +7,11 @@ import Config from 'react-native-config';
 
 import { useFetch } from '@decky.fx/react-native-essentials';
 
+import { UserPreferenceKeys } from '../realm/models/UserPreference';
+
 import useUserPreference from './useUserPreference';
 
-import { UserPreferenceKeys } from '../realm/models/UserPreference';
+import useUserLogin from './useUserLogin';
 
 export enum RealmWebhookMethod {
     GET = "GET",
@@ -40,7 +42,7 @@ export interface ResponseSchema {
 const useRealmWebhook = (endpoint: string, options: WebhookOptions) => {
     const { value: lang } = useUserPreference(UserPreferenceKeys.LANGUAGE);
 
-    const { value: token } = useUserPreference(UserPreferenceKeys.ACCESS_TOKEN);
+    const { value: user } = useUserLogin();
 
     const [result, setResult] = useState<ResultSchema>({
         data: null,
@@ -51,7 +53,7 @@ const useRealmWebhook = (endpoint: string, options: WebhookOptions) => {
     options.headers = options.headers ? options.headers : {
         'Content-Type': 'application/json',
         lang: lang?.getValue() || "id",
-        Authorization: token?.getValue() ? 'Bearer ' + token?.getValue() : undefined,
+        Authorization: user?.access_token ? 'Bearer ' + user?.access_token : undefined,
     };
     if (!options.headers.Authorization) {
         delete options.headers.Authorization;

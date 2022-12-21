@@ -1,19 +1,31 @@
 import React from 'react';
 
-import {View, StyleSheet, ViewStyle, Text, Pressable} from 'react-native';
+import { View, StyleSheet, ViewStyle, Text, Pressable } from 'react-native';
 
-import {StackActions, useNavigation} from '@react-navigation/native';
+import { StackActions, useNavigation } from '@react-navigation/native';
+
+import { useEffectOnce } from '@decky.fx/react-native-essentials';
 
 import PreAuthStackRouteNames from '../../PreAuthStackRouteNames';
 
-const CreateAccountScreen = ({}) => {
+import useUserPreference from '../../../../hooks/useUserPreference';
+
+import { UserPreferenceKeys } from '../../../../realm/models/UserPreference';
+
+const CreateAccountScreen = ({ }) => {
   const navigation = useNavigation();
+
+  const { update: toRegister } = useUserPreference(UserPreferenceKeys.INTRO_TO_REGISTER);
 
   const toLogin = () => {
     navigation.dispatch(
       StackActions.replace(PreAuthStackRouteNames.LoginScreen),
     );
   };
+
+  useEffectOnce(() => {
+    toRegister(false);
+  })
 
   return (
     <View style={styles.container}>
