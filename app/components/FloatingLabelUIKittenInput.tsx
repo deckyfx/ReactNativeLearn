@@ -2,9 +2,21 @@
 // https://gist.github.com/halilb/9ac8e43e95ffbda42d52c34d420e78a4#file-textfield-tsx
 // Cobine with UIKitten as base
 
-import React, { useEffect, useRef, useState } from 'react'
+import React, {
+    forwardRef,
+    Ref,
+    useEffect,
+    useImperativeHandle,
+    useRef,
+    useState
+} from 'react'
 
-import { ImageProps, NativeSyntheticEvent, TextInputFocusEventData, ViewStyle } from 'react-native';
+import {
+    ImageProps,
+    NativeSyntheticEvent,
+    TextInputFocusEventData,
+    TextInputProps, ViewStyle
+} from 'react-native';
 
 import {
     Text,
@@ -15,32 +27,49 @@ import {
     TouchableWithoutFeedback,
 } from 'react-native'
 
-import { Input, Layout } from '@ui-kitten/components';
+import { Input } from '@ui-kitten/components';
 
 import { RenderProp } from '@ui-kitten/components/devsupport';
 
-type Props = {
+import { Control, FieldName, FieldValues, RegisterOptions, useController } from 'react-hook-form';
+
+interface Props extends TextInputProps {
+    name: FieldName<FieldValues>,
+    control?: Control<any>,
+    rules?: Exclude<RegisterOptions, 'valueAsNumber' | 'valueAsDate' | 'setValueAs'>;
     label?: string,
     errorText?: string,
-    value?: string,
     style?: ViewStyle,
     onBlur?: (event: NativeSyntheticEvent<TextInputFocusEventData>) => void,
     onFocus?: (event: NativeSyntheticEvent<TextInputFocusEventData>) => void,
     accessoryLeft?: RenderProp<Partial<ImageProps>>,
-    [x: string]: any;
 };
 
-const FloatingLabelUIKittenInput = (props: Props) => {
+export type RefAction = {
+    focus: () => void;
+    blur: () => void;
+}
+
+const FloatingLabelUIKittenInput = forwardRef<RefAction, Props>((props: Props, ref: Ref<RefAction>) => {
     const {
+        name,
+        control,
+        rules,
         label,
         errorText,
-        value,
         style,
         onBlur,
         onFocus,
         accessoryLeft,
         ...restOfProps
-    } = props;
+    }: Props = props;
+
+    const { field } = useController({
+        name,
+        control,
+        defaultValue: '',
+        rules
+    })
 
     const [isFocused, setIsFocused] = useState<boolean>(false);
 
@@ -56,7 +85,6 @@ const FloatingLabelUIKittenInput = (props: Props) => {
 
     const styles = StyleSheet.create({
         input: {
-            padding: 10,
             borderWidth: width,
             borderRadius: 4,
             fontFamily: 'Avenir-Medium',
@@ -72,27 +100,35 @@ const FloatingLabelUIKittenInput = (props: Props) => {
             fontSize: 16,
         },
         error: {
-            marginTop: 4,
-            marginLeft: 12,
             fontSize: 12,
             color: '#B00020',
             fontFamily: 'Avenir-Medium',
         },
     });
 
+    const focus = () => inputRef.current?.focus();
+
+    const blur = () => inputRef.current?.blur();
+
     useEffect(() => {
         Animated.timing(focusAnim, {
-            toValue: isFocused || !!value ? 1 : 0,
+            toValue: isFocused || !!field.value ? 1 : 0,
             duration: 150,
             easing: Easing.bezier(0.4, 0, 0.2, 1),
             useNativeDriver: true,
         }).start()
-    }, [focusAnim, isFocused, value]);
+    }, [focusAnim, isFocused, field.value]);
+
+    useImperativeHandle(ref, () => ({
+        focus,
+        blur
+    }));
 
     return (
-        <Layout style={{
-            width: 200,
-        }}>
+        <View style={[{
+            minWidth: 200,
+            marginBottom: 12
+        }, style]}>
             <Input
                 style={[
                     styles.input,
@@ -103,8 +139,10 @@ const FloatingLabelUIKittenInput = (props: Props) => {
                 ref={inputRef}
                 accessoryLeft={accessoryLeft}
                 {...restOfProps}
-                value={value}
+                value={field.value}
+                onChangeText={field.onChange}
                 onBlur={(event) => {
+                    field.onBlur()
                     setIsFocused(false)
                     onBlur?.(event)
                 }}
@@ -128,13 +166,13 @@ const FloatingLabelUIKittenInput = (props: Props) => {
                                 {
                                     translateY: focusAnim.interpolate({
                                         inputRange: [0, 1],
-                                        outputRange: [18, 0],
+                                        outputRange: [8, -14],
                                     }),
                                 },
                                 {
                                     translateX: focusAnim.interpolate({
                                         inputRange: [0, 1],
-                                        outputRange: [accessoryLeft ? 50 : 16, 16 - (props.label?.length || 0)],
+                                        outputRange: [accessoryLeft ? 40 : 6, 6 - (props.label?.length || 0)],
                                     }),
                                 },
                             ],
@@ -155,8 +193,8 @@ const FloatingLabelUIKittenInput = (props: Props) => {
                 </Animated.View>
             </TouchableWithoutFeedback>
             {!!errorText && <Text style={styles.error}>{errorText}</Text>}
-        </Layout>
+        </View>
     )
-};
+});
 
 export default FloatingLabelUIKittenInput;
